@@ -9,10 +9,11 @@ import Skeleton from "@mui/material/Skeleton";
 import Grid from "@mui/material/Grid";
 import {useState} from "react";
 import {RiRobot3Fill} from "react-icons/ri";
-import {VscRequestChanges} from "react-icons/vsc";
+import {LuScanText} from "react-icons/lu";
 import {PiListMagnifyingGlassBold} from "react-icons/pi";
 import {TiUploadOutline} from "react-icons/ti";
 import { HiUsers } from "react-icons/hi2";
+import {IoIosImages} from "react-icons/io";
 import {MdAddBusiness} from "react-icons/md";
 import ContentRequestForm from "../components/ContentRequestForm";
 import GeneratedContent from "../components/GeneratedContent";
@@ -32,8 +33,13 @@ const NAVIGATION = [
     children: [
       {
         segment: "requests",
-        title: "Request",
-        icon: <VscRequestChanges className='text-2xl' />,
+        title: "Post Request",
+        icon: <LuScanText className='text-2xl' />,
+      },
+      {
+        segment: "images",
+        title: "Image Request",
+        icon: <IoIosImages className='text-2xl' />,
       },
       {
         segment: "review",
@@ -77,6 +83,21 @@ function ContentPage({pathname}) {
 
   switch (pathname) {
     case "/content-creation/requests":
+      content = (
+        <Box className='w-full px-5'>
+          <ContentRequestForm />
+          <Grid container spacing={2} mt={2}>
+            <Grid item xs={6}>
+              <Skeleton variant='rounded' height={120} />
+            </Grid>
+            <Grid item xs={6}>
+              <Skeleton variant='rounded' height={120} />
+            </Grid>
+          </Grid>
+        </Box>
+      );
+      break;
+    case "/content-creation/images":
       content = (
         <Box className='w-full px-5'>
           <ContentRequestForm />
