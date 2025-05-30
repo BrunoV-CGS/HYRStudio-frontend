@@ -12,12 +12,17 @@ import {RiRobot3Fill} from "react-icons/ri";
 import {VscRequestChanges} from "react-icons/vsc";
 import {PiListMagnifyingGlassBold} from "react-icons/pi";
 import {TiUploadOutline} from "react-icons/ti";
+import { HiUsers } from "react-icons/hi2";
+import {MdAddBusiness} from "react-icons/md";
 import ContentRequestForm from "../components/ContentRequestForm";
 import GeneratedContent from "../components/GeneratedContent";
 import ReviewedContent from "../components/ReviewedContent";
 import HYR_Studio_logo from "../assets/HYR_Studio_logo.png";
 import UpdateBaseModal from "../components/UpdateBaseModal";
 import SidebarButton from "../components/SidebarButton";
+import useUserLoginStore from "../hooks/useUserLoginStore";
+import Users from "../components/Users";
+import Companies from "../components/Companies";
 
 const NAVIGATION = [
   {
@@ -108,6 +113,24 @@ function ContentPage({pathname}) {
         </Box>
       );
       break;
+    case "/users":
+      content = (
+        <Box className='w-full text-left px-5'>
+          <Typography variant='h6' mb={2}>
+            <Users />
+          </Typography>
+        </Box>
+      );
+      break;
+    case "/companies":
+      content = (
+        <Box className='w-full text-left px-5'>
+          <Typography variant='h6' mb={2}>
+            <Companies/>
+          </Typography>
+        </Box>
+      );
+      break;
 
     default:
       content = (
@@ -140,13 +163,31 @@ ContentPage.propTypes = {
 function MainDashboard({window}) {
   const router = useDemoRouter("/content-creation/requests");
   const demoWindow = window ? window() : undefined;
+  const {getUserRole} = useUserLoginStore();
+  const userRole = getUserRole();
 
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
 
-  const filteredNavigation = NAVIGATION;
+  const filteredNavigation = [...NAVIGATION];
+
+  if (userRole === "admin") {
+    filteredNavigation.push(
+      {kind: "divider"},
+      {
+        segment: "users",
+        title: "Manage Users",
+        icon: <HiUsers className='text-2xl' />,
+      },
+      {
+        segment: "companies",
+        title: "Manage Companies",
+        icon: <MdAddBusiness className='text-2xl' />,
+      }
+    );
+  }
 
   return (
     <AppProvider

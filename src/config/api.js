@@ -14,4 +14,15 @@ export const API_URL_USER_INFO = `${API_URL_BASE}/auth/me`;
 
 export const API_URL_UPDATE_KNOWLEDGE_BASE = `${API_URL_BASE}/knowledge-base/update`;
 
+//--------------------------------------------------------
+
+export const API_URL_CREATE_USERS = `${API_URL_BASE}/users`;
+
+export const API_URL_GET_USERS = `${API_URL_BASE}/users/all`;
+
+//--------------------------------------------------------
+
+export const API_URL_CREATE_COMPANY = `${API_URL_BASE}/companies`;
+
+export const API_URL_GET_COMPANIES = `${API_URL_BASE}/companies/all`;
 

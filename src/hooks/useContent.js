@@ -17,9 +17,6 @@ const useContent = () => {
   const companies = getUserCompanies();
 
   const contentGenerator = async (formValues) => {
-    setLoading(true);
-    console.log(formValues);
-
     try {
       const response = await fetch(API_URL_CONTENT_REQUEST, {
         method: "POST",
@@ -113,6 +110,7 @@ const useContent = () => {
   };
 
   const fetchGeneratedContent = async () => {
+    setLoading(true);
     try {
       const response = await fetch(API_URL_GET_CONTENT_REQUEST, {
         method: "GET",
@@ -125,6 +123,7 @@ const useContent = () => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Error fetching content:", response.status, errorText);
+        setLoading(false);
         Swal.fire(
           "Error",
           "Could not fetch content. Please try again.",
@@ -136,13 +135,16 @@ const useContent = () => {
 
       const data = await response.json();
       if (Array.isArray(data) && data.length > 0) {
+        setLoading(false);
         return data;
       } else {
+        setLoading(false);
         Swal.fire("No Content", "No generated content was found.", "info");
         return [];
       }
     } catch (error) {
       console.error("Server connection error:", error);
+      setLoading(false);
       Swal.fire(
         "Error",
         "An unexpected error occurred. Please try again later.",
@@ -153,6 +155,7 @@ const useContent = () => {
     }
   };
   const fetchReviewedContent = async () => {
+    setLoading(true);
     try {
       const response = await fetch(API_URL_GET_REVIEWED_CONTENT_REQUEST, {
         method: "GET",
@@ -165,6 +168,7 @@ const useContent = () => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Error fetching content:", response.status, errorText);
+        setLoading(false);
         Swal.fire(
           "Error",
           "Could not fetch content. Please try again.",
@@ -176,9 +180,11 @@ const useContent = () => {
 
       const data = await response.json();
       if (Array.isArray(data) && data.length > 0) {
+        setLoading(false);
         return data;
       } else {
         Swal.fire("No Content", "No generated content was found.", "info");
+        setLoading(false);
         return [];
       }
     } catch (error) {

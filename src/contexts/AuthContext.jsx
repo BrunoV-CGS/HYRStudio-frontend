@@ -6,7 +6,7 @@ import {
   signInWithRedirect,
   signOut,
 } from "firebase/auth";
-import { API_URL_USER_INFO } from "../config/api";
+import {API_URL_USER_INFO} from "../config/api";
 import useUserLoginStore from "../hooks/useUserLoginStore";
 
 const AuthContext = createContext();
@@ -14,7 +14,7 @@ const AuthContext = createContext();
 export function AuthProvider({children}) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const {setUserCompanies, saveUserToken} = useUserLoginStore();
+  const {setUserCompanies, saveUserToken, setUserRole} = useUserLoginStore();
 
   useEffect(() => {
     const unsub = onIdTokenChanged(auth, async (rawUser) => {
@@ -27,7 +27,6 @@ export function AuthProvider({children}) {
       try {
         const token = await rawUser.getIdToken(true);
 
-        // ✅ Llamada al backend para verificar si está autorizado
         const res = await fetch(API_URL_USER_INFO, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,7 +42,6 @@ export function AuthProvider({children}) {
 
         const data = await res.json();
 
-        // Guardamos los datos del backend
         setUser({
           uid: data.uid,
           email: data.email,
@@ -53,6 +51,7 @@ export function AuthProvider({children}) {
           token,
         });
         setUserCompanies(data.companies);
+        setUserRole(data.role);
         saveUserToken(token);
       } catch (err) {
         console.error("Error al verificar el token:", err);
