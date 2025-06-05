@@ -2,6 +2,8 @@ export const API_URL_BASE = import.meta.env.VITE_API_URL_PRODUCTION || "http://l
 
 export const API_URL_CONTENT_REQUEST = `${API_URL_BASE}/content/generate`;
 
+export const API_URL_GOOGLE_IMAGE_REQUEST = `${API_URL_BASE}/generate/image/gemini`;
+
 export const API_URL_GET_CONTENT_REQUEST = `${API_URL_BASE}/content/all`;
 
 export const API_URL_CONTENT_REVIEW = `${API_URL_BASE}/content/review`;
@@ -25,4 +27,6 @@ export const API_URL_GET_USERS = `${API_URL_BASE}/users/all`;
 export const API_URL_CREATE_COMPANY = `${API_URL_BASE}/companies`;
 
 export const API_URL_GET_COMPANIES = `${API_URL_BASE}/companies/all`;
+
+
 

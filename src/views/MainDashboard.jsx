@@ -12,7 +12,7 @@ import {RiRobot3Fill} from "react-icons/ri";
 import {LuScanText} from "react-icons/lu";
 import {PiListMagnifyingGlassBold} from "react-icons/pi";
 import {TiUploadOutline} from "react-icons/ti";
-import { HiUsers } from "react-icons/hi2";
+import {HiUsers} from "react-icons/hi2";
 import {IoIosImages} from "react-icons/io";
 import {MdAddBusiness} from "react-icons/md";
 import ContentRequestForm from "../components/ContentRequestForm";
@@ -24,6 +24,7 @@ import SidebarButton from "../components/SidebarButton";
 import useUserLoginStore from "../hooks/useUserLoginStore";
 import Users from "../components/Users";
 import Companies from "../components/Companies";
+import ImagesRequest from "../components/ImagesRequest";
 
 const NAVIGATION = [
   {
@@ -100,15 +101,7 @@ function ContentPage({pathname}) {
     case "/content-creation/images":
       content = (
         <Box className='w-full px-5'>
-          <ContentRequestForm />
-          <Grid container spacing={2} mt={2}>
-            <Grid item xs={6}>
-              <Skeleton variant='rounded' height={120} />
-            </Grid>
-            <Grid item xs={6}>
-              <Skeleton variant='rounded' height={120} />
-            </Grid>
-          </Grid>
+          <ImagesRequest/>
         </Box>
       );
       break;
@@ -147,7 +140,7 @@ function ContentPage({pathname}) {
       content = (
         <Box className='w-full text-left px-5'>
           <Typography variant='h6' mb={2}>
-            <Companies/>
+            <Companies />
           </Typography>
         </Box>
       );

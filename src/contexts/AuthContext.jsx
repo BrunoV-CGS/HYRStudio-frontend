@@ -14,7 +14,7 @@ const AuthContext = createContext();
 export function AuthProvider({children}) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const {setUserCompanies, saveUserToken, setUserRole} = useUserLoginStore();
+  const {setCompanies, saveUserToken, setUserRole} = useUserLoginStore();
 
   useEffect(() => {
     const unsub = onIdTokenChanged(auth, async (rawUser) => {
@@ -50,7 +50,7 @@ export function AuthProvider({children}) {
           companies: data.companies,
           token,
         });
-        setUserCompanies(data.companies);
+        setCompanies(data.companies);
         setUserRole(data.role);
         saveUserToken(token);
       } catch (err) {

@@ -11,7 +11,6 @@ const useUsers = () => {
   const {setLoading} = useLoader();
   const {getUserToken} = useUserLoginStore();
   const userToken = getUserToken();
-  console.log(userToken)
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -43,7 +42,6 @@ const useUsers = () => {
   };
 
   const createUser = async (userData) => {
-    console.log(userData);
     setLoading(true);
     try {
       const response = await fetch(API_URL_CREATE_USERS, {
@@ -76,7 +74,6 @@ const useUsers = () => {
   };
 
   const updateUser = async (email, userData) => {
-    console.log(userData);
     setLoading(true);
     try {
       const response = await fetch(`${API_URL_CREATE_USERS}/${email}`, {

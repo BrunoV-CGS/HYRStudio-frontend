@@ -23,8 +23,8 @@ export function CompanySelection() {
   });
 
   const navigate = useNavigate();
-  const {getUserCompanies, setUserCompanies} = useUserLoginStore();
-  const userCompanies = getUserCompanies();
+  const {getCompanies, setUserCompanies} = useUserLoginStore();
+  const userCompanies = getCompanies();
 
   const submitForm = (data) => {
     const selectedCompany = userCompanies.find(

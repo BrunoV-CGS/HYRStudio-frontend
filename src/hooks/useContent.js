@@ -1,5 +1,6 @@
 import {
   API_URL_CONTENT_REQUEST,
+  API_URL_GOOGLE_IMAGE_REQUEST,
   API_URL_CONTENT_REVIEW,
   API_URL_GET_CONTENT_REQUEST,
   API_URL_GET_REVIEWED_CONTENT_REQUEST,
@@ -66,6 +67,87 @@ const useContent = () => {
       return null;
     }
   };
+
+  const handleGoogleGenerateImage = async (row) => {
+    console.log(row);
+    const {id} = row;
+    setLoading(true);
+
+    try {
+      const response = await fetch(API_URL_GOOGLE_IMAGE_REQUEST, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({
+          postId: id,
+        }),
+      }); // <-- este paréntesis faltaba
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error generating image:", response.status, errorText);
+        Swal.fire(
+          "Error",
+          "Image could not be generated. Please try again.",
+          "error"
+        );
+        setLoading(false);
+        return null;
+      }
+
+      const data = await response.json();
+      setLoading(false);
+
+      if (data?.imageUrl) {
+        Swal.fire({
+          title: "Image Generated",
+          html: `
+            <p>The image has been generated successfully.</p>
+            <button id="view-image-button" style="
+              margin-top: 10px;
+              padding: 8px 16px;
+              background-color:rgb(93, 183, 96);
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            ">View Image</button>
+          `,
+          icon: "success",
+          
+          didRender: () => {
+            const btn = document.getElementById("view-image-button");
+            btn?.addEventListener("click", () => {
+              window.open(data.imageUrl, "_blank", "noopener,noreferrer");
+            });
+          },
+        });
+        
+        console.log(data)
+        return data;
+      } else {
+        Swal.fire(
+          "Warning",
+          "No image returned by the AI. Try modifying the content.",
+          "warning"
+        );
+        return null;
+      }
+    } catch (error) {
+      console.error("Server error generating image:", error);
+      Swal.fire(
+        "Error",
+        "An unexpected error occurred while generating the image.",
+        "error"
+      );
+      setLoading(false);
+      return null;
+    }
+  };
+  
+  
 
   const reviewPost = async (formValues) => {
     setLoading(true);
@@ -289,6 +371,7 @@ const useContent = () => {
 
   return {
     contentGenerator,
+    handleGoogleGenerateImage,
     reviewPost,
     fetchGeneratedContent,
     fetchReviewedContent,

@@ -38,7 +38,6 @@ const useCompanies = () => {
   };
 
   const createCompany = async (companyData) => {
-    console.log(companyData);
     setLoading(true);
     try {
       const response = await fetch(API_URL_CREATE_COMPANY, {
