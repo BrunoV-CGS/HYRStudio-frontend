@@ -8,6 +8,7 @@ import {
   TableRow,
   Paper,
   Tooltip,
+  Button,
   IconButton,
   Chip,
   Typography,
@@ -32,7 +33,7 @@ export default function ReviewedContent() {
   const [content, setContent] = useState([]);
   const {getUserCompanies} = useUserLoginStore();
   const userCompanies = getUserCompanies();
-
+ 
   const fetchData = async () => {
     const externalData = await fetchReviewedContent();
 
@@ -64,6 +65,7 @@ export default function ReviewedContent() {
             content: row.content,
             network: row.network.toLowerCase(),
             reviewedPostId: row.id,
+            imageUrl: row.imageUrl || null,
           };
 
           await sendToMixpost(payload);
@@ -85,9 +87,17 @@ export default function ReviewedContent() {
     switch (columnKey) {
       case "persona":
       case "topic":
-      case "content":
         return <Typography variant='body2'>{row[columnKey]}</Typography>;
 
+      case "content":
+        return (
+          <Typography
+            variant='body2'
+            sx={{maxHeight: "60px", overflow: "auto"}}
+          >
+            {row[columnKey]}
+          </Typography>
+        );
       case "keywords":
         return (
           <>
@@ -107,24 +117,46 @@ export default function ReviewedContent() {
 
       case "actions":
         return (
-          <>
-            <Tooltip title='Enviar a Mixpost'>
-              <IconButton
-                color='primary'
-                onClick={() => handleSendToMixpost(row)}
-              >
-                <BackupIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title='Eliminar'>
-              <IconButton
-                color='error'
-                onClick={() => console.log("Eliminar", row)}
-              >
-                <DeleteForeverIcon />
-              </IconButton>
-            </Tooltip>
-          </>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            <div>
+              <Tooltip title='Enviar a Mixpost'>
+                <IconButton
+                  color='primary'
+                  onClick={() => handleSendToMixpost(row)}
+                >
+                  <BackupIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title='Eliminar'>
+                <IconButton
+                  color='error'
+                  onClick={() => console.log("Eliminar", row)}
+                >
+                  <DeleteForeverIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+            <Button
+              variant='outlined'
+              size='small'
+              onClick={() => {
+                if (row.imageUrl) {
+                  window.open(row.imageUrl, "_blank");
+                } else {
+                  alert("Post without image");
+                }
+              }}
+            >
+              See Image
+            </Button>
+          </div>
         );
 
       default:

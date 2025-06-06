@@ -69,7 +69,6 @@ const useContent = () => {
   };
 
   const handleGoogleGenerateImage = async (row) => {
-    console.log(row);
     const {id} = row;
     setLoading(true);
 
@@ -116,7 +115,7 @@ const useContent = () => {
             ">View Image</button>
           `,
           icon: "success",
-          
+
           didRender: () => {
             const btn = document.getElementById("view-image-button");
             btn?.addEventListener("click", () => {
@@ -124,8 +123,7 @@ const useContent = () => {
             });
           },
         });
-        
-        console.log(data)
+
         return data;
       } else {
         Swal.fire(
@@ -146,8 +144,6 @@ const useContent = () => {
       return null;
     }
   };
-  
-  
 
   const reviewPost = async (formValues) => {
     setLoading(true);
@@ -283,6 +279,7 @@ const useContent = () => {
 
   const sendToMixpost = async (content) => {
     setLoading(true);
+   
     try {
       const response = await fetch(
         `${API_URL_SEND_TO_MIXPOST}?companyId=${companies.companyId}`,
