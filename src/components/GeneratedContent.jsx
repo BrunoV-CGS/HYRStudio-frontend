@@ -40,8 +40,9 @@ export default function GeneratedContent() {
     const externalData = await fetchGeneratedContent();
 
     const filteredData = externalData.filter(
-      (item) => item.persona === userCompanies.companyName
+      (item) => item.persona === userCompanies.companyName && item.reviewed === false
     );
+   
     setContent(filteredData);
   };
 
@@ -106,6 +107,7 @@ export default function GeneratedContent() {
                 <DeleteForeverIcon />
               </IconButton>
             </Tooltip>
+            
           </>
         );
 

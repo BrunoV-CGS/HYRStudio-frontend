@@ -38,14 +38,14 @@ const NAVIGATION = [
         icon: <LuScanText className='text-2xl' />,
       },
       {
-        segment: "images",
-        title: "Image Request",
-        icon: <IoIosImages className='text-2xl' />,
-      },
-      {
         segment: "review",
         title: "To Review",
         icon: <PiListMagnifyingGlassBold className='text-2xl' />,
+      },
+      {
+        segment: "images",
+        title: "Image Request",
+        icon: <IoIosImages className='text-2xl' />,
       },
     ],
   },
@@ -98,14 +98,6 @@ function ContentPage({pathname}) {
         </Box>
       );
       break;
-    case "/content-creation/images":
-      content = (
-        <Box className='w-full px-5'>
-          <ImagesRequest/>
-        </Box>
-      );
-      break;
-
     case "/content-creation/review":
       content = (
         <Box className='w-full text-left px-5'>
@@ -113,6 +105,14 @@ function ContentPage({pathname}) {
             Generated Content
           </Typography>
           <GeneratedContent />
+        </Box>
+      );
+      break;
+
+    case "/content-creation/images":
+      content = (
+        <Box className='w-full px-5'>
+          <ImagesRequest />
         </Box>
       );
       break;

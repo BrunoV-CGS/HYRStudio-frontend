@@ -38,15 +38,22 @@ export default function ImagesRequest() {
 
     const companyName = userCompanies.companyName;
 
-    const reviewedFiltered = reviewed
-      .filter((item) => item.persona === companyName)
-      .map((item) => ({...item, type: "reviewed"}));
+    const reviewedFiltered = reviewed.filter(
+      (item) =>
+        item.persona === companyName &&
+        item.posted === false &&
+        typeof item.reviewed === "boolean"
+    );
+     
 
     const reviewedIds = new Set(reviewedFiltered.map((item) => item.id));
 
     const generatedFiltered = generated
       .filter(
-        (item) => item.persona === companyName && !reviewedIds.has(item.id)
+        (item) =>
+          item.persona === companyName &&
+          !reviewedIds.has(item.id) &&
+          item.posted === false
       )
       .map((item) => ({...item, type: "generated"}));
 

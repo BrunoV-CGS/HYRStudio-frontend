@@ -38,7 +38,7 @@ export default function ReviewedContent() {
     const externalData = await fetchReviewedContent();
 
     const filteredData = externalData.filter(
-      (item) => item.persona === userCompanies.companyName
+      (item) => item.persona === userCompanies.companyName && item.reviewed === true && item.posted === false
     );
 
     setContent(filteredData);
