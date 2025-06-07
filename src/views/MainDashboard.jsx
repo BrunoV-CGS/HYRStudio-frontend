@@ -132,6 +132,16 @@ function ContentPage({pathname}) {
         </Box>
       );
       break;
+    case "/website":
+      content = (
+        <Box className='w-full text-left px-5'>
+          <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
+            Upload to Blog
+          </h2>
+          <UploadToBlog />
+        </Box>
+      );
+      break;
 
     case "/users":
       content = (
