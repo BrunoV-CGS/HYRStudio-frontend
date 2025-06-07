@@ -17,29 +17,33 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BackupIcon from "@mui/icons-material/Backup";
 import useContent from "../hooks/useContent";
 import useUserLoginStore from "../hooks/useUserLoginStore";
+import useBlogs from "../hooks/useBlogs";
 import Swal from "sweetalert2";
 
 const columns = [
   {name: "Topic", uid: "topic"},
   {name: "Keywords", uid: "keywords"},
-  {name: "Network", uid: "network"},
   {name: "Content", uid: "content"},
   {name: "Actions", uid: "actions"},
 ];
 
-export default function ReviewedContent() {
-  const {fetchReviewedContent, sendToMixpost} = useContent();
+export default function UploadToBlog() {
+  const {fetchReviewedContent} = useContent();
   const [content, setContent] = useState([]);
   const {getUserCompanies} = useUserLoginStore();
+  const {createBlogPost} = useBlogs();
   const userCompanies = getUserCompanies();
- 
+
   const fetchData = async () => {
     const externalData = await fetchReviewedContent();
 
     const filteredData = externalData.filter(
-      (item) => item.persona === userCompanies.companyName && item.reviewed === true && item.posted === false && item.network !== "blog"
+      (item) =>
+        item.persona === userCompanies.companyName &&
+        item.reviewed === true &&
+        item.posted === false &&
+        item.network === "blog"
     );
-
     setContent(filteredData);
   };
 
@@ -50,7 +54,7 @@ export default function ReviewedContent() {
   const handleSendToMixpost = (row) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "This content will be sent to Mixpost.",
+      text: "This content will be sent to the Website.",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -61,13 +65,16 @@ export default function ReviewedContent() {
       if (result.isConfirmed) {
         try {
           const payload = {
-            content: row.content,
-            network: row.network.toLowerCase(),
             reviewedPostId: row.id,
-            imageUrl: row.imageUrl || null,
+            topic: row.topic, 
+            content: row.content, 
+            imageUrl: row.imageUrl ?? "", 
+            industry: row.industry ?? "", 
+            keywords: row.keywords ?? [], 
+            persona: row.persona ?? "", 
           };
 
-          await sendToMixpost(payload);
+          await createBlogPost(payload);
           Swal.fire(
             "Sent",
             "The content was successfully sent to Mixpost.",
@@ -84,7 +91,7 @@ export default function ReviewedContent() {
 
   const renderCell = (row, columnKey) => {
     switch (columnKey) {
-      
+      case "persona":
       case "topic":
         return <Typography variant='body2'>{row[columnKey]}</Typography>;
 
@@ -111,9 +118,6 @@ export default function ReviewedContent() {
           </>
         );
 
-      case "network":
-        return <Chip label={row.network} color='primary' size='small' />;
-
       case "actions":
         return (
           <div
@@ -125,7 +129,7 @@ export default function ReviewedContent() {
             }}
           >
             <div>
-              <Tooltip title='upload to Mixpost'>
+              <Tooltip title='Upload'>
                 <IconButton
                   color='primary'
                   onClick={() => handleSendToMixpost(row)}
@@ -193,7 +197,7 @@ export default function ReviewedContent() {
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} align='center'>
-                No generated content for this company
+                No reviewed content to upload to blog
               </TableCell>
             </TableRow>
           )}

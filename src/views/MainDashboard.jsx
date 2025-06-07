@@ -15,6 +15,7 @@ import {TiUploadOutline} from "react-icons/ti";
 import {HiUsers} from "react-icons/hi2";
 import {IoIosImages} from "react-icons/io";
 import {MdAddBusiness} from "react-icons/md";
+import {TbWorldUpload} from "react-icons/tb";
 import ContentRequestForm from "../components/ContentRequestForm";
 import GeneratedContent from "../components/GeneratedContent";
 import ReviewedContent from "../components/ReviewedContent";
@@ -25,6 +26,7 @@ import useUserLoginStore from "../hooks/useUserLoginStore";
 import Users from "../components/Users";
 import Companies from "../components/Companies";
 import ImagesRequest from "../components/ImagesRequest";
+import UploadToBlog from "../components/uploadToBlog";
 
 const NAVIGATION = [
   {
@@ -130,6 +132,7 @@ function ContentPage({pathname}) {
         </Box>
       );
       break;
+
     case "/users":
       content = (
         <Box className='w-full text-left px-5'>
@@ -176,8 +179,9 @@ ContentPage.propTypes = {
 function MainDashboard({window}) {
   const router = useDemoRouter("/content-creation/requests");
   const demoWindow = window ? window() : undefined;
-  const {getUserRole} = useUserLoginStore();
+  const {getUserRole, getUserCompanies} = useUserLoginStore();
   const userRole = getUserRole();
+  const companies = getUserCompanies();
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -200,6 +204,18 @@ function MainDashboard({window}) {
         icon: <MdAddBusiness className='text-2xl' />,
       }
     );
+  }
+
+  if (companies?.companyName === "HYRW") {
+    const mixpostIndex = filteredNavigation.findIndex(
+      (item) => item.segment === "mixpost"
+    );
+
+    filteredNavigation.splice(mixpostIndex + 1, 0, {
+      segment: "website",
+      title: "Upload to Blog",
+      icon: <TbWorldUpload className='text-2xl' />,
+    });
   }
 
   return (
