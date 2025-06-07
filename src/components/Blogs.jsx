@@ -27,7 +27,7 @@ const columns = [
   {name: "Actions", uid: "actions"},
 ];
 
-export default function UploadToBlog() {
+export default function Blogs() {
   const {fetchReviewedContent} = useContent();
   const [content, setContent] = useState([]);
   const {getUserCompanies} = useUserLoginStore();
@@ -66,12 +66,12 @@ export default function UploadToBlog() {
         try {
           const payload = {
             reviewedPostId: row.id,
-            topic: row.topic, 
-            content: row.content, 
-            imageUrl: row.imageUrl ?? "", 
-            industry: row.industry ?? "", 
-            keywords: row.keywords ?? [], 
-            persona: row.persona ?? "", 
+            topic: row.topic,
+            content: row.content,
+            imageUrl: row.imageUrl ?? "",
+            industry: row.industry ?? "",
+            keywords: row.keywords ?? [],
+            persona: row.persona ?? "",
           };
 
           await createBlogPost(payload);

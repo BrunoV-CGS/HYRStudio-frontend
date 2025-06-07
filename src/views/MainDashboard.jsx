@@ -26,7 +26,8 @@ import useUserLoginStore from "../hooks/useUserLoginStore";
 import Users from "../components/Users";
 import Companies from "../components/Companies";
 import ImagesRequest from "../components/ImagesRequest";
-import UploadToBlog from "../components/uploadToBlog";
+import Blogs from "../components/Blogs";
+
 
 const NAVIGATION = [
   {
@@ -138,7 +139,7 @@ function ContentPage({pathname}) {
           <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
             Upload to Blog
           </h2>
-          <UploadToBlog />
+          <Blogs />
         </Box>
       );
       break;
