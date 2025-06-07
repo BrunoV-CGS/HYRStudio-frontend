@@ -115,6 +115,19 @@ export default function ImagesRequest() {
             >
               Re-Generate Image
             </Button>
+            <Button
+              variant='outlined'
+              size='small'
+              onClick={() => {
+                if (row.imageUrl) {
+                  window.open(row.imageUrl, "_blank");
+                } else {
+                  alert("Post without image");
+                }
+              }}
+            >
+              See Image
+            </Button>
           </div>
         );
 
