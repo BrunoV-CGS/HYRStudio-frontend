@@ -6,11 +6,21 @@ import useUserLoginStore from "../hooks/useUserLoginStore";
 
 const NETWORK_OPTIONS = [
   {label: "Instagram", value: "instagram"},
+  {label: "Instagram Story", value: "instagram_stories"},
   {label: "LinkedIn", value: "linkedin"},
-  {label: "Twitter", value: "twitter"},
+  {label: "Twitter", value: "x"},
   {label: "Facebook", value: "facebook_page"},
+  {label: "Website Blog Post", value: "blog"},
 ];
-
+const LANGUAGE_OPTIONS = [
+  {label: "English", value: "english"},
+  {label: "Spanish", value: "spanish"},
+  {label: "French", value: "french"},
+  {label: "German", value: "german"},
+  {label: "Italian", value: "italian"},
+  {label: "Hebrew", value: "hebrew"},
+  {label: "Russian", value: "russian"},
+];
 
 export default function ContentRequestForm() {
   const {contentGenerator} = useContent();
@@ -26,10 +36,11 @@ export default function ContentRequestForm() {
 
   const [keywords, setKeywords] = useState([]);
   const [network, setNetwork] = useState("Instagram");
+  const [lenguage, setLenguage] = useState("English");
   const [keywordInput, setKeywordInput] = useState("");
 
   const onSubmit = async (data) => {
-    const formData = {...data, keywords, network};
+    const formData = {...data, keywords, network, lenguage};
     setLoading(true);
     const result = await contentGenerator(formData);
 
@@ -125,29 +136,6 @@ export default function ContentRequestForm() {
               </div>
             </div>
 
-            {/* Limit */}
-            <div>
-              <label className='block text-sm text-left font-medium text-gray-900'>
-                Word Limit
-              </label>
-              <div className='mt-2'>
-                <input
-                  type='number'
-                  {...register("limit", {
-                    required: "Limit is required",
-                    valueAsNumber: true,
-                  })}
-                  className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600'
-                  placeholder='e.g. 180'
-                />
-                {errors.limit && (
-                  <p className='text-sm text-red-500 mt-1'>
-                    {errors.limit.message}
-                  </p>
-                )}
-              </div>
-            </div>
-
             {/* Network */}
             <div>
               <label className='block text-sm text-left font-medium text-gray-900'>
@@ -168,8 +156,28 @@ export default function ContentRequestForm() {
               </div>
             </div>
 
+            {/* Lenguage */}
+            <div>
+              <label className='block text-sm text-left font-medium text-gray-900'>
+                Lenguage
+              </label>
+              <div className='mt-2'>
+                <select
+                  value={lenguage}
+                  onChange={(e) => setLenguage(e.target.value)}
+                  className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600'
+                >
+                  {LANGUAGE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             {/* Keywords (ocupa las dos columnas) */}
-            <div className='col-span-full'>
+            <div >
               <label className='block text-sm text-left font-medium text-gray-900'>
                 Keywords
               </label>

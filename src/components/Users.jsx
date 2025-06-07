@@ -115,9 +115,11 @@ export default function Users() {
   return (
     <>
       <Stack direction='row' justifyContent='space-between' sx={{mb: 2}}>
-        <Typography variant='h6'>Users</Typography>
+        <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
+          Manage Users
+        </h2>
         <button
-          className='rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+          className='rounded-md bg-indigo-600 h-10 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
           onClick={handleCreate}
         >
           Create User

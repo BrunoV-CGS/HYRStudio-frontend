@@ -20,8 +20,8 @@ import EditCompanyModal from "./EditCompanyModal";
 import CreateCompanyModal from "./CreateCompanyModal";
 
 const columns = [
-  {name: "Mixpost ID", uid: "id"},
   {name: "Company Name", uid: "name"},
+  {name: "Mixpost ID", uid: "id"},
   {name: "Actions", uid: "actions"},
 ];
 
@@ -61,10 +61,10 @@ export default function Companies() {
 
   const renderCell = (row, columnKey) => {
     switch (columnKey) {
-      case "id":
-        return <Typography variant='body2'>{row.id}</Typography>;
       case "name":
         return <Typography variant='body2'>{row.name}</Typography>;
+      case "id":
+        return <Typography variant='body2'>{row.id}</Typography>;
       case "actions":
         return (
           <>
@@ -91,9 +91,11 @@ export default function Companies() {
   return (
     <>
       <Stack direction='row' justifyContent='space-between' sx={{mb: 2}}>
-        <Typography variant='h6'>Companies</Typography>
+        <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
+          Companies
+        </h2>
         <button
-          className='rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+          className='rounded-md bg-indigo-600 h-10 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
           onClick={handleCreate}
         >
           Create Company

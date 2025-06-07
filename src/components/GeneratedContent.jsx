@@ -24,7 +24,6 @@ const columns = [
   {name: "Keywords", uid: "keywords"},
   {name: "Network", uid: "network"},
   {name: "Industry", uid: "industry"},
-  {name: "Limit", uid: "limit"},
   {name: "Actions", uid: "actions"},
 ];
 
@@ -71,7 +70,6 @@ export default function GeneratedContent() {
       case "persona":
       case "topic":
       case "industry":
-      case "limit":
         return <Typography variant='body2'>{row[columnKey]}</Typography>;
 
       case "keywords":

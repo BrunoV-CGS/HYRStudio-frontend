@@ -101,9 +101,9 @@ function ContentPage({pathname}) {
     case "/content-creation/review":
       content = (
         <Box className='w-full text-left px-5'>
-          <Typography variant='h6' mb={2}>
-            Generated Content
-          </Typography>
+          <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
+            Content to review
+          </h2>
           <GeneratedContent />
         </Box>
       );
@@ -112,6 +112,9 @@ function ContentPage({pathname}) {
     case "/content-creation/images":
       content = (
         <Box className='w-full px-5'>
+          <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
+            Request Images
+          </h2>
           <ImagesRequest />
         </Box>
       );
@@ -120,9 +123,9 @@ function ContentPage({pathname}) {
     case "/mixpost":
       content = (
         <Box className='w-full text-left px-5'>
-          <Typography variant='h6' mb={2}>
-            Mixpost Integration
-          </Typography>
+          <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
+            Mixpost integration
+          </h2>
           <ReviewedContent />
         </Box>
       );
@@ -130,18 +133,14 @@ function ContentPage({pathname}) {
     case "/users":
       content = (
         <Box className='w-full text-left px-5'>
-          <Typography variant='h6' mb={2}>
-            <Users />
-          </Typography>
+          <Users />
         </Box>
       );
       break;
     case "/companies":
       content = (
         <Box className='w-full text-left px-5'>
-          <Typography variant='h6' mb={2}>
-            <Companies />
-          </Typography>
+          <Companies />
         </Box>
       );
       break;

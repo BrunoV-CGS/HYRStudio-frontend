@@ -1,4 +1,4 @@
-export const API_URL_BASE = import.meta.env.VITE_API_URL_PRODUCTION || "http://localhost:3000";
+export const API_URL_BASE = "http://localhost:3000";
 
 export const API_URL_CONTENT_REQUEST = `${API_URL_BASE}/content/generate`;
 

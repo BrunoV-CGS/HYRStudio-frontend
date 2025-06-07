@@ -279,7 +279,7 @@ const useContent = () => {
 
   const sendToMixpost = async (content) => {
     setLoading(true);
-   
+
     try {
       const response = await fetch(
         `${API_URL_SEND_TO_MIXPOST}?companyId=${companies.companyId}`,
