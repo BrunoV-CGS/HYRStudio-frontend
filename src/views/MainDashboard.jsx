@@ -15,7 +15,8 @@ import {TiUploadOutline} from "react-icons/ti";
 import {HiUsers} from "react-icons/hi2";
 import {IoIosImages} from "react-icons/io";
 import {MdAddBusiness} from "react-icons/md";
-import {TbWorldUpload} from "react-icons/tb";
+import { TbWorldUpload } from "react-icons/tb";
+import {MdVoiceChat} from "react-icons/md";
 import ContentRequestForm from "../components/ContentRequestForm";
 import GeneratedContent from "../components/GeneratedContent";
 import ReviewedContent from "../components/ReviewedContent";
@@ -27,7 +28,7 @@ import Users from "../components/Users";
 import Companies from "../components/Companies";
 import ImagesRequest from "../components/ImagesRequest";
 import Blogs from "../components/Blogs";
-
+import ContentRequestChat from "../components/ContentRequestChat";
 
 const NAVIGATION = [
   {
@@ -37,8 +38,13 @@ const NAVIGATION = [
     children: [
       {
         segment: "requests",
-        title: "Post Request",
+        title: "Content Request",
         icon: <LuScanText className='text-2xl' />,
+      },
+      {
+        segment: "IArequests",
+        title: "IA Content Request",
+        icon: <MdVoiceChat className='text-2xl' />,
       },
       {
         segment: "review",
@@ -98,6 +104,13 @@ function ContentPage({pathname}) {
               <Skeleton variant='rounded' height={120} />
             </Grid>
           </Grid>
+        </Box>
+      );
+      break;
+    case "/content-creation/IArequests":
+      content = (
+        <Box className='w-full px-5'>
+          <ContentRequestChat />
         </Box>
       );
       break;

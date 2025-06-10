@@ -36,11 +36,11 @@ export default function ContentRequestForm() {
 
   const [keywords, setKeywords] = useState([]);
   const [network, setNetwork] = useState("Instagram");
-  const [lenguage, setLenguage] = useState("English");
+  const [language, setLanguage] = useState("English");
   const [keywordInput, setKeywordInput] = useState("");
 
   const onSubmit = async (data) => {
-    const formData = {...data, keywords, network, lenguage};
+    const formData = {...data, keywords, network, language};
     setLoading(true);
     const result = await contentGenerator(formData);
 
@@ -68,7 +68,7 @@ export default function ContentRequestForm() {
     <div className='flex w-full min-h-full flex-col justify-center px-6  lg:px-8'>
       <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
         <h2 className='text-center text-2xl/9 font-bold tracking-tight text-gray-900'>
-          Request AI Content
+          Request Content
         </h2>
       </div>
 
@@ -156,15 +156,15 @@ export default function ContentRequestForm() {
               </div>
             </div>
 
-            {/* Lenguage */}
+            {/* Language */}
             <div>
               <label className='block text-sm text-left font-medium text-gray-900'>
-                Lenguage
+                Language
               </label>
               <div className='mt-2'>
                 <select
-                  value={lenguage}
-                  onChange={(e) => setLenguage(e.target.value)}
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
                   className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600'
                 >
                   {LANGUAGE_OPTIONS.map((option) => (

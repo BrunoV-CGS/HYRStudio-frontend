@@ -176,7 +176,13 @@ export default function Blogs() {
               <TableCell
                 key={col.uid}
                 align='center'
-                sx={col.uid === "actions" ? {width: 200} : {}}
+                sx={
+                  col.uid === "actions"
+                    ? {width: 200}
+                    : col.uid === "topic"
+                      ? {width: 350}
+                      : {}
+                }
               >
                 {col.name}
               </TableCell>
