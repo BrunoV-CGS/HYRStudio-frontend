@@ -16,6 +16,7 @@ const useAIAgent = () => {
 
   useEffect(() => {
     if (!socket) return;
+
     const handleUpdate = (data) => {
       const statusMsg = {role: "assistant", text: data.message};
       setMessages((prev) => [...prev, statusMsg]);
@@ -48,12 +49,13 @@ const useAIAgent = () => {
     setIsLoading(true);
     setMessages((prev) => [...prev, {role: "user", text}]);
 
-    let finalInstruction = text;
-    if (isAwaitingClarification && conversationContext) {
-      finalInstruction = `Original instruction was: "${conversationContext}". The user has provided the following clarification: "${text}". Please proceed.`;
+    let newContext;
+    if (isAwaitingClarification) {
+      newContext = conversationContext + "\n[ACLARACIÓN] " + text;
     } else {
-      setConversationContext(text);
+      newContext = text;
     }
+    setConversationContext(newContext);
 
     try {
       const userToken = useUserLoginStore.getState().getUserToken();
@@ -62,7 +64,7 @@ const useAIAgent = () => {
       const {data} = await axios.post(
         API_URL_AI_CONTENT_REQUEST,
         {
-          instruction: finalInstruction,
+          instruction: newContext,
           persona: company?.companyName,
           socketId: socket.id,
         },
@@ -90,8 +92,8 @@ const useAIAgent = () => {
         ]);
         setIsAwaitingClarification(false);
         setConversationContext(null);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
   };
 
