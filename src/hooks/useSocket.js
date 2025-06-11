@@ -1,16 +1,20 @@
 // src/hooks/useSocket.js
 import {useState, useEffect} from "react";
 import {io} from "socket.io-client";
-import {API_URL_BASE} from "../config/api";
+import { API_URL_BASE } from "../config/api";
+import useUserLoginStore from "./useUserLoginStore";
 
 const useSocket = () => {
   const [socket, setSocket] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
+    const { getCompanies } = useUserLoginStore();
+    const userCompany = getCompanies()
+    
 
   useEffect(() => {
     const sock = io(API_URL_BASE, {
       path: "/socket.io",
-      transports: ["websocket"], // fuerza WebSocket y evita polling
+      transports: ["websocket"], 
       reconnectionAttempts: 5,
       timeout: 20000,
     });
@@ -19,8 +23,7 @@ const useSocket = () => {
 
     sock.on("connect", () => {
       setIsConnected(true);
-      // únete a tu sala personal para recibir eventos dirigidos
-      sock.emit("joinRoom", {room: sock.id});
+      sock.emit("joinRoom", {room: `company:${userCompany.compamyId}`});
     });
 
     sock.on("disconnect", () => {
