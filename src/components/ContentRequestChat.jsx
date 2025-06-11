@@ -1,5 +1,4 @@
 import {useState, useEffect, useRef} from "react";
-import {motion} from "framer-motion";
 
 import {
   Card,
@@ -16,8 +15,6 @@ export default function ContentRequestChat() {
   const [input, setInput] = useState("");
   const bottomRef = useRef(null);
   const {messages, isLoading, isConnected, sendInstruction} = useAIAgent();
-  
- 
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({behavior: "smooth"});
@@ -28,7 +25,6 @@ export default function ContentRequestChat() {
     if (!trimmed || isLoading) return;
 
     setInput("");
-    
 
     sendInstruction(trimmed);
   };

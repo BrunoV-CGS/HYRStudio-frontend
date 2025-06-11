@@ -30,9 +30,19 @@ const useAIAgent = () => {
   }, [socket]);
 
   const sendInstruction = async (text) => {
-    if (!isConnected) {
-      alert("Connecting to agent server... Please wait a moment.");
+    if (!socket) {
+      alert("Socket not initialized yet. Please wait.");
       return;
+    }
+
+    if (!socket.connected) {
+      await new Promise((resolve) => {
+        const listener = () => {
+          socket.off("connect", listener);
+          resolve();
+        };
+        socket.on("connect", listener);
+      });
     }
 
     setIsLoading(true);
