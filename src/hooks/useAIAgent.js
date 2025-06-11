@@ -16,11 +16,12 @@ const useAIAgent = () => {
 
   useEffect(() => {
     if (!socket) return;
-
     const handleUpdate = (data) => {
       const statusMsg = {role: "assistant", text: data.message};
       setMessages((prev) => [...prev, statusMsg]);
-      setIsLoading(false);
+      if (data.isDone) {
+        setIsLoading(false);
+      }
     };
 
     socket.on("job_update", handleUpdate);
@@ -44,7 +45,6 @@ const useAIAgent = () => {
         socket.on("connect", listener);
       });
     }
-
     setIsLoading(true);
     setMessages((prev) => [...prev, {role: "user", text}]);
 
@@ -70,8 +70,8 @@ const useAIAgent = () => {
       );
 
       setMessages((prev) => [...prev, {role: "assistant", text: data.message}]);
+
       setIsAwaitingClarification(false);
-      setConversationContext(null);
     } catch (err) {
       if (
         err.response &&
@@ -94,6 +94,12 @@ const useAIAgent = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!isLoading && !isAwaitingClarification) {
+      setConversationContext(null);
+    }
+  }, [messages, isLoading, isAwaitingClarification]);
 
   return {messages, isLoading, isConnected, sendInstruction};
 };
