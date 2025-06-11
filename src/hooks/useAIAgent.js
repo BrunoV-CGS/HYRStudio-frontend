@@ -1,56 +1,42 @@
-// hooks/useAIAgent.js
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect} from "react";
 import axios from "axios";
-import {io} from "socket.io-client";
-import {API_URL_BASE, API_URL_AI_CONTENT_REQUEST} from "../config/api";
+import {API_URL_AI_CONTENT_REQUEST} from "../config/api";
 import useUserLoginStore from "./useUserLoginStore";
+import useSocket from "./useSocket";
 
 const useAIAgent = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [conversationContext, setConversationContext] = useState(null);
   const [isAwaitingClarification, setIsAwaitingClarification] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+
+  const {socket, isConnected} = useSocket();
   const {getUserCompanies} = useUserLoginStore();
   const company = getUserCompanies();
-  const socketRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io(API_URL_BASE);
+    if (!socket) return;
 
-    socketRef.current.on("connect", () => {
-      setIsConnected(true);
-    });
-
-    socketRef.current.on("disconnect", () => {
-      setIsConnected(false);
-    });
-
-    socketRef.current.on("job_update", (data) => {
+    const handleUpdate = (data) => {
       const statusMsg = {role: "assistant", text: data.message};
       setMessages((prev) => [...prev, statusMsg]);
-
-      if (data.message) {
-        setIsLoading(false);
-      }
-    });
-
-    return () => {
-      socketRef.current.disconnect();
+      setIsLoading(false);
     };
-  }, []);
+
+    socket.on("job_update", handleUpdate);
+    return () => {
+      socket.off("job_update", handleUpdate);
+    };
+  }, [socket]);
 
   const sendInstruction = async (text) => {
-    const persona = company?.companyName;
     if (!isConnected) {
       alert("Connecting to agent server... Please wait a moment.");
       return;
     }
 
     setIsLoading(true);
-
-    const userMsg = {role: "user", text};
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => [...prev, {role: "user", text}]);
 
     let finalInstruction = text;
     if (isAwaitingClarification && conversationContext) {
@@ -67,14 +53,13 @@ const useAIAgent = () => {
         API_URL_AI_CONTENT_REQUEST,
         {
           instruction: finalInstruction,
-          persona,
-          socketId: socketRef.current.id,
+          persona: company?.companyName,
+          socketId: socket.id,
         },
         {headers: {Authorization: `Bearer ${userToken}`}}
       );
 
-      const assistantMsg = {role: "assistant", text: data.message};
-      setMessages((prev) => [...prev, assistantMsg]);
+      setMessages((prev) => [...prev, {role: "assistant", text: data.message}]);
       setIsAwaitingClarification(false);
       setConversationContext(null);
     } catch (err) {
@@ -82,28 +67,22 @@ const useAIAgent = () => {
         err.response &&
         err.response.data?.status === "clarification_needed"
       ) {
-        const assistantMsg = {
-          role: "assistant",
-          text: err.response.data.message,
-        };
-        setMessages((prev) => [...prev, assistantMsg]);
+        setMessages((prev) => [
+          ...prev,
+          {role: "assistant", text: err.response.data.message},
+        ]);
         setIsAwaitingClarification(true);
       } else {
         console.error("AI agent error:", err);
-        const errorMsg = {
-          role: "assistant",
-          text: "⚠️ An error occurred. Please try again.",
-        };
-        setMessages((prev) => [...prev, errorMsg]);
-        // Reseteamos en caso de error
+        setMessages((prev) => [
+          ...prev,
+          {role: "assistant", text: "⚠️ An error occurred. Please try again."},
+        ]);
         setIsAwaitingClarification(false);
         setConversationContext(null);
       }
-      // Si hay un error inmediato, sí desactivamos el loading
       setIsLoading(false);
     }
-    // El 'finally' no es necesario aquí porque el loading se desactiva
-    // o en el CATCH, o a través del evento del WEBSOCKET.
   };
 
   return {messages, isLoading, isConnected, sendInstruction};
