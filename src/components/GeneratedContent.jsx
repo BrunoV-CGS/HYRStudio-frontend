@@ -12,6 +12,7 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
+import Swal from "sweetalert2";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import useContent from "../hooks/useContent";
@@ -29,7 +30,7 @@ const columns = [
 ];
 
 export default function GeneratedContent() {
-  const {fetchGeneratedContent} = useContent();
+  const {fetchGeneratedContent, deleteGeneratedPost} = useContent();
   const [content, setContent] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -40,9 +41,10 @@ export default function GeneratedContent() {
     const externalData = await fetchGeneratedContent();
 
     const filteredData = externalData.filter(
-      (item) => item.persona === userCompanies.companyName && item.reviewed === false
+      (item) =>
+        item.persona === userCompanies.companyName && item.reviewed === false
     );
-   
+
     setContent(filteredData);
   };
 
@@ -53,6 +55,25 @@ export default function GeneratedContent() {
   const handleEdit = (row) => {
     setSelectedRow(row);
     setModalOpen(true);
+  };
+
+  const handleDeletePost = async (row) => {
+    const result = await Swal.fire({
+      title: "Are you sure you want to delete this post?",
+      text: "This action cannot be undone",
+      icon: "warning",
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: "Yes, delete it",
+      denyButtonText: "No, keep it",
+    });
+
+    if (result.isConfirmed) {
+      const success = await deleteGeneratedPost(row.id);
+      if (success) {
+        await fetchData();
+      }
+    }
   };
 
   const handleModalClose = () => {
@@ -100,14 +121,10 @@ export default function GeneratedContent() {
               </IconButton>
             </Tooltip>
             <Tooltip title='Delete'>
-              <IconButton
-                color='error'
-                onClick={() => console.log("Eliminar", row)}
-              >
+              <IconButton color='error' onClick={() => handleDeletePost(row)}>
                 <DeleteForeverIcon />
               </IconButton>
             </Tooltip>
-            
           </>
         );
 

@@ -6,6 +6,8 @@ import {
   API_URL_GET_REVIEWED_CONTENT_REQUEST,
   API_URL_SEND_TO_MIXPOST,
   API_URL_UPDATE_KNOWLEDGE_BASE,
+  API_URL_DELETE_GENERATED_POST,
+  API_URL_DELETE_REVIEWED_POST,
 } from "../config/api";
 import Swal from "sweetalert2";
 import useLoader from "./useLoader";
@@ -366,6 +368,88 @@ const useContent = () => {
     }
   };
 
+  const deleteGeneratedPost = async (postId) => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${API_URL_DELETE_GENERATED_POST}/${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(
+          "Error deleting generated post:",
+          response.status,
+          errorText
+        );
+        Swal.fire("Error", "Could not delete the generated post.", "error");
+        setLoading(false);
+        return null;
+      }
+
+      Swal.fire(
+        "Deleted",
+        "The generated post was deleted successfully.",
+        "success"
+      );
+      setLoading(false);
+      return true;
+    } catch (error) {
+      console.error("Server connection error:", error);
+      Swal.fire("Error", "Unexpected error while deleting the post.", "error");
+      setLoading(false);
+      return null;
+    }
+  };
+
+  const deleteReviewedPost = async (postId) => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${API_URL_DELETE_REVIEWED_POST}/${postId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(
+          "Error deleting reviewed post:",
+          response.status,
+          errorText
+        );
+        Swal.fire("Error", "Could not delete the reviewed post.", "error");
+        setLoading(false);
+        return null;
+      }
+
+      Swal.fire(
+        "Deleted",
+        "The reviewed post was deleted successfully.",
+        "success"
+      );
+      setLoading(false);
+      return true;
+    } catch (error) {
+      console.error("Server connection error:", error);
+      Swal.fire("Error", "Unexpected error while deleting the post.", "error");
+      setLoading(false);
+      return null;
+    }
+  };
+
   return {
     contentGenerator,
     handleGoogleGenerateImage,
@@ -374,6 +458,8 @@ const useContent = () => {
     fetchReviewedContent,
     sendToMixpost,
     updateKnowledgeBase,
+    deleteGeneratedPost,
+    deleteReviewedPost,
   };
 };
 

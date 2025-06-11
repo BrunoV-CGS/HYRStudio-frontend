@@ -20,12 +20,10 @@ const useAIAgent = () => {
 
     socketRef.current.on("connect", () => {
       setIsConnected(true);
-      console.log("WebSocket Connected! Client ID:", socketRef.current.id);
     });
 
     socketRef.current.on("disconnect", () => {
       setIsConnected(false);
-      console.log("WebSocket Disconnected!");
     });
 
     socketRef.current.on("job_update", (data) => {
@@ -44,7 +42,6 @@ const useAIAgent = () => {
 
   const sendInstruction = async (text) => {
     const persona = company?.companyName;
-    console.log(persona);
     if (!isConnected) {
       alert("Connecting to agent server... Please wait a moment.");
       return;

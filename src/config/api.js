@@ -18,6 +18,10 @@ export const API_URL_USER_INFO = `${API_URL_BASE}/auth/me`;
 
 export const API_URL_UPDATE_KNOWLEDGE_BASE = `${API_URL_BASE}/knowledge-base/update`;
 
+export const API_URL_DELETE_GENERATED_POST = `${API_URL_BASE}/content/delete/generated`;
+
+export const API_URL_DELETE_REVIEWED_POST = `${API_URL_BASE}/content/delete/reviewed`;
+
 //--------------------------------------------------------
 
 export const API_URL_CREATE_USERS = `${API_URL_BASE}/users`;

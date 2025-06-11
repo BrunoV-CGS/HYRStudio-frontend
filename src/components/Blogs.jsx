@@ -28,7 +28,7 @@ const columns = [
 ];
 
 export default function Blogs() {
-  const {fetchReviewedContent} = useContent();
+  const {fetchReviewedContent, deleteReviewedPost} = useContent();
   const [content, setContent] = useState([]);
   const {getUserCompanies} = useUserLoginStore();
   const {createBlogPost} = useBlogs();
@@ -89,6 +89,25 @@ export default function Blogs() {
     });
   };
 
+  const handleDeletePost = async (row) => {
+        const result = await Swal.fire({
+          title: "Are you sure you want to delete this post?",
+          text: "This action cannot be undone",
+          icon: "warning",
+          showDenyButton: true,
+          showCancelButton: false,
+          confirmButtonText: "Yes, delete it",
+          denyButtonText: "No, keep it",
+        });
+    
+        if (result.isConfirmed) {
+          const success = await deleteReviewedPost(row.id);
+          if (success) {
+            await fetchData();
+          }
+        }
+      };
+
   const renderCell = (row, columnKey) => {
     switch (columnKey) {
       case "persona":
@@ -138,10 +157,7 @@ export default function Blogs() {
                 </IconButton>
               </Tooltip>
               <Tooltip title='Eliminar'>
-                <IconButton
-                  color='error'
-                  onClick={() => console.log("Eliminar", row)}
-                >
+                <IconButton color='error' onClick={() => handleDeletePost(row)}>
                   <DeleteForeverIcon />
                 </IconButton>
               </Tooltip>
