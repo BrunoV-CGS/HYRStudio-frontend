@@ -1,4 +1,4 @@
-export const API_URL_BASE = "https://hyr-studio-u34bz.ondigitalocean.app";
+export const API_URL_BASE = "http://localhost:3000";
 
 export const API_URL_CONTENT_REQUEST = `${API_URL_BASE}/content/generate`;
 

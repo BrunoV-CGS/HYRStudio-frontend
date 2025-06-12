@@ -15,8 +15,10 @@ import {TiUploadOutline} from "react-icons/ti";
 import {HiUsers} from "react-icons/hi2";
 import {IoIosImages} from "react-icons/io";
 import {MdAddBusiness} from "react-icons/md";
-import { TbWorldUpload } from "react-icons/tb";
+import {TbWorldUpload} from "react-icons/tb";
 import {MdVoiceChat} from "react-icons/md";
+import {TfiWrite} from "react-icons/tfi";
+import {FiFeather} from "react-icons/fi";
 import ContentRequestForm from "../components/ContentRequestForm";
 import GeneratedContent from "../components/GeneratedContent";
 import ReviewedContent from "../components/ReviewedContent";
@@ -29,6 +31,7 @@ import Companies from "../components/Companies";
 import ImagesRequest from "../components/ImagesRequest";
 import Blogs from "../components/Blogs";
 import ContentRequestChat from "../components/ContentRequestChat";
+import NeuronWriter from "../components/NeuronWriter";
 
 const NAVIGATION = [
   {
@@ -146,7 +149,17 @@ function ContentPage({pathname}) {
         </Box>
       );
       break;
-    case "/website":
+    case "/blog-management/neuron":
+      content = (
+        <Box className='w-full text-left px-5'>
+          <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
+            Upload to Neuron Writer
+          </h2>
+          <NeuronWriter />
+        </Box>
+      );
+      break;
+    case "/blog-management/website":
       content = (
         <Box className='w-full text-left px-5'>
           <h2 className='text-left mb-4 text-2xl/9 font-bold tracking-tight text-gray-900'>
@@ -231,14 +244,26 @@ function MainDashboard({window}) {
   }
 
   if (companies?.companyName === "HYRW") {
-    const mixpostIndex = filteredNavigation.findIndex(
-      (item) => item.segment === "mixpost"
+    const contentCreationIndex = filteredNavigation.findIndex(
+      (item) => item.segment === "content-creation"
     );
 
-    filteredNavigation.splice(mixpostIndex + 1, 0, {
-      segment: "website",
-      title: "Upload to Blog",
-      icon: <TbWorldUpload className='text-2xl' />,
+    filteredNavigation.splice(contentCreationIndex + 1, 0, {
+      segment: "blog-management",
+      title: "Blog Management",
+      icon: <TfiWrite className='text-2xl' />,
+      children: [
+        {
+          segment: "neuron",
+          title: "Neuron Writer Integration",
+          icon: <FiFeather className='text-2xl' />,
+        },
+        {
+          segment: "website",
+          title: "Upload to Blog",
+          icon: <TbWorldUpload className='text-2xl' />,
+        },
+      ],
     });
   }
 

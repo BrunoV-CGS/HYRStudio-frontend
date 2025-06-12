@@ -13,13 +13,13 @@ const NETWORK_OPTIONS = [
   {label: "Website Blog Post", value: "blog"},
 ];
 const LANGUAGE_OPTIONS = [
-  {label: "English", value: "english"},
-  {label: "Spanish", value: "spanish"},
-  {label: "French", value: "french"},
-  {label: "German", value: "german"},
-  {label: "Italian", value: "italian"},
-  {label: "Hebrew", value: "hebrew"},
-  {label: "Russian", value: "russian"},
+  {label: "English", value: "English"},
+  {label: "Spanish", value: "Spanish"},
+  {label: "French", value: "French"},
+  {label: "German", value: "German"},
+  {label: "Italian", value: "Italian"},
+  {label: "Hebrew", value: "Hebrew"},
+  {label: "Russian", value: "Russian"},
 ];
 
 export default function ContentRequestForm() {
