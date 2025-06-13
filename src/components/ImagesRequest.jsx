@@ -15,7 +15,6 @@ import useContent from "../hooks/useContent";
 import useUserLoginStore from "../hooks/useUserLoginStore";
 
 const columns = [
-  {name: "Persona", uid: "persona"},
   {name: "Topic", uid: "topic"},
   {name: "Keywords", uid: "keywords"},
   {name: "Network", uid: "network"},
@@ -44,7 +43,6 @@ export default function ImagesRequest() {
         item.posted === false &&
         typeof item.reviewed === "boolean"
     );
-     
 
     const reviewedIds = new Set(reviewedFiltered.map((item) => item.id));
 
@@ -71,13 +69,21 @@ export default function ImagesRequest() {
 
   const renderCell = (row, columnKey) => {
     switch (columnKey) {
-      case "persona":
       case "topic":
+        return (
+          <Typography
+            variant='body2'
+            sx={{height: "60px", width: "170px", overflow: "auto"}}
+          >
+            {row[columnKey]}
+          </Typography>
+        );
+
       case "content":
         return (
           <Typography
             variant='body2'
-            sx={{maxHeight: "60px", overflow: "auto"}}
+            sx={{maxHeight: "60px", width: "350px", overflow: "auto"}}
           >
             {row[columnKey]}
           </Typography>
@@ -87,7 +93,13 @@ export default function ImagesRequest() {
         return (
           <>
             {row.keywords.map((kw) => (
-              <Chip key={kw} label={kw} size='small' sx={{mr: 0.5, mb: 0.5}} />
+              <Chip
+                key={kw}
+                label={kw}
+                size='small'
+                style={{marginRight: 4, marginBottom: 2}}
+                sx={{maxHeight: "60px", width: "90px", overflow: "auto"}}
+              />
             ))}
           </>
         );
@@ -137,7 +149,7 @@ export default function ImagesRequest() {
   };
 
   return (
-    <TableContainer component={Paper} sx={{maxHeight: 600, overflowY: "auto"}}>
+    <TableContainer component={Paper} sx={{maxHeight: 600, maxWidth: "100%", overflowY: "auto"}}>
       <Table stickyHeader aria-label='Images Request Table'>
         <TableHead>
           <TableRow>
@@ -147,14 +159,14 @@ export default function ImagesRequest() {
                 align='center'
                 sx={
                   col.uid === "actions"
-                    ? {width: 150}
+                    ? {width: 170}
                     : col.uid === "topic"
-                      ? {width: 200}
-                      : col.uid === "content"
-                        ? {width: 350}
-                        : col.uid === "keywords"
-                          ? {width: 150}
-                          : {}
+                      ? {width: 170}
+                    : col.uid === "keywords"
+                      ? {width: 220}
+                    : col.uid === "network"
+                      ? {width: 50}
+                      : {}
                 }
               >
                 {col.name}

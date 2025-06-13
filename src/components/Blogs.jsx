@@ -42,7 +42,8 @@ export default function Blogs() {
         item.persona === userCompanies.companyName &&
         item.reviewed === true &&
         item.posted === false &&
-        item.network === "blog"
+        item.network === "blog" &&
+        item.neuron_analyzed === true
     );
     setContent(filteredData);
   };
@@ -219,7 +220,7 @@ export default function Blogs() {
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} align='center'>
-                No reviewed content to upload to blog
+                No reviewed in Neuron Writer content to upload to blog
               </TableCell>
             </TableRow>
           )}

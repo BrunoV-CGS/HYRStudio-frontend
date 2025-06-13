@@ -260,7 +260,7 @@ function MainDashboard({window}) {
         },
         {
           segment: "website",
-          title: "Upload to Blog",
+          title: "Upload to Website",
           icon: <TbWorldUpload className='text-2xl' />,
         },
       ],

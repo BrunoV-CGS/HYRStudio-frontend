@@ -37,3 +37,7 @@ export const API_URL_GET_COMPANIES = `${API_URL_BASE}/companies/all`;
 //--------------------------------------------------------
 
 export const API_URL_BLOG_CREATE = `${API_URL_BASE}/blog/create`;
+
+export const API_URL_BLOG_UPLOAD_NEURON = `${API_URL_BASE}/neuron-writer/import-content`;
+
+export const API_URL_BLOG_DOWNLOAD_FROM_NEURON = `${API_URL_BASE}/neuron-writer/get-optimized`;

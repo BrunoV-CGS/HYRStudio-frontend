@@ -14,10 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import BackupIcon from "@mui/icons-material/Backup";
+import BackupIcon from "@mui/icons-material/Backup"; // ⬅️ se mantiene para el “upload”
+import {IoMdCloudDownload} from "react-icons/io"; // ⬅️ nuevo icono “download”
 import useContent from "../hooks/useContent";
 import useUserLoginStore from "../hooks/useUserLoginStore";
-import useBlogs from "../hooks/useBlogs";
+import useNeuron from "../hooks/useNeuron";
 import Swal from "sweetalert2";
 
 const columns = [
@@ -32,12 +33,12 @@ export default function NeuronWriter() {
   const {fetchReviewedContent, deleteReviewedPost} = useContent();
   const [content, setContent] = useState([]);
   const {getUserCompanies} = useUserLoginStore();
-  const {createBlogPost} = useBlogs();
+  const {pushContentToNeuron, pullContentFromNeuron} = useNeuron();
+
   const userCompanies = getUserCompanies();
 
   const fetchData = async () => {
     const externalData = await fetchReviewedContent();
-    console.log(externalData);
 
     const filteredData = externalData.filter(
       (item) =>
@@ -47,6 +48,7 @@ export default function NeuronWriter() {
         item.network === "blog" &&
         item.neuron_analyzed === false
     );
+
     setContent(filteredData);
   };
 
@@ -54,10 +56,24 @@ export default function NeuronWriter() {
     fetchData();
   }, []);
 
-  const handleSendToMixpost = (row) => {
+    const handlePullDataFromNeuron = async (row) => {
+    try {
+      await pullContentFromNeuron(row.neuron_query); 
+      Swal.fire(
+        "Pulled!",
+        "The processed version was downloaded from Neuron Writer.",
+        "success"
+      );
+    } catch (err) {
+      console.error("Error pulling data:", err);
+      Swal.fire("Error", "Could not download the content.", "error");
+    }
+  };
+
+  const handleSendToNeuron = (row) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "This content will be sent to the Website.",
+      text: "This content will be sent to Neuron Writer.",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -68,25 +84,21 @@ export default function NeuronWriter() {
       if (result.isConfirmed) {
         try {
           const payload = {
-            reviewedPostId: row.id,
-            topic: row.topic,
-            content: row.content,
-            imageUrl: row.imageUrl ?? "",
-            industry: row.industry ?? "",
-            keywords: row.keywords ?? [],
-            persona: row.persona ?? "",
+            queryId: row.neuron_query,
+            htmlContent: row.content,
+            title: row.topic,
           };
 
-          await createBlogPost(payload);
+          await pushContentToNeuron(payload);
           Swal.fire(
             "Sent",
-            "The content was successfully sent to Mixpost.",
+            "The content was successfully sent to Neuron Writer.",
             "success"
           );
           setContent((prev) => prev.filter((item) => item.id !== row.id));
         } catch (error) {
           Swal.fire("Error", "Failed to send the content.", "error");
-          console.error("Error sending to Mixpost:", error);
+          console.error("Error sending to Neuron Writer:", error);
         }
       }
     });
@@ -111,7 +123,10 @@ export default function NeuronWriter() {
     }
   };
 
+  /* ---------- renderCell con lógica condicional ---------- */
   const renderCell = (row, columnKey) => {
+    const isUploaded = row.neuron_content_uploaded === true; // 👀 bandera
+
     switch (columnKey) {
       case "topic":
         return (
@@ -129,6 +144,7 @@ export default function NeuronWriter() {
             {row[columnKey]}
           </Typography>
         );
+
       case "keywords":
         return (
           <>
@@ -142,6 +158,7 @@ export default function NeuronWriter() {
             ))}
           </>
         );
+
       case "neuron":
         return (
           <div className='w-30'>
@@ -155,7 +172,7 @@ export default function NeuronWriter() {
               }}
               className='flex w-full justify-center items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
             >
-              See in NR
+              See in Neuron
             </button>
           </div>
         );
@@ -171,20 +188,28 @@ export default function NeuronWriter() {
             }}
           >
             <div>
-              <Tooltip title='Upload'>
+              <Tooltip
+                title={isUploaded ? "Download from Neuron" : "Upload to Neuron"}
+              >
                 <IconButton
                   color='primary'
-                  onClick={() => handleSendToMixpost(row)}
+                  onClick={() =>
+                    isUploaded
+                      ? handlePullDataFromNeuron(row)
+                      : handleSendToNeuron(row)
+                  }
                 >
-                  <BackupIcon />
+                  {isUploaded ? <IoMdCloudDownload /> : <BackupIcon />}
                 </IconButton>
               </Tooltip>
+
               <Tooltip title='Eliminar'>
                 <IconButton color='error' onClick={() => handleDeletePost(row)}>
                   <DeleteForeverIcon />
                 </IconButton>
               </Tooltip>
             </div>
+
             <Button
               variant='outlined'
               size='small'
@@ -219,7 +244,7 @@ export default function NeuronWriter() {
                   col.uid === "actions"
                     ? {width: 200}
                     : col.uid === "topic"
-                      ? {width: 350}
+                      ? {width: 280}
                       : {}
                 }
               >
@@ -228,17 +253,30 @@ export default function NeuronWriter() {
             ))}
           </TableRow>
         </TableHead>
+
         <TableBody>
           {content.length > 0 ? (
-            content.map((row) => (
-              <TableRow key={row.id} hover>
-                {columns.map((col) => (
-                  <TableCell key={col.uid} align='center'>
-                    {renderCell(row, col.uid)}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
+            content.map((row) => {
+              const isUploaded = row.neuron_content_uploaded === true;
+              return (
+                <TableRow
+                  key={row.id}
+                  hover
+                  /* ----------- 🎨 FORMATO CONDICIONAL ----------- */
+                  sx={
+                    isUploaded
+                      ? {backgroundColor: "#e8f5e9"} // verde clarito
+                      : {}
+                  }
+                >
+                  {columns.map((col) => (
+                    <TableCell key={col.uid} align='center'>
+                      {renderCell(row, col.uid)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} align='center'>
