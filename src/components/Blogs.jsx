@@ -157,7 +157,7 @@ export default function Blogs() {
                   <BackupIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title='Eliminar'>
+              <Tooltip title='Delete'>
                 <IconButton color='error' onClick={() => handleDeletePost(row)}>
                   <DeleteForeverIcon />
                 </IconButton>

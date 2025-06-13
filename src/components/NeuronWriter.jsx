@@ -56,14 +56,15 @@ export default function NeuronWriter() {
     fetchData();
   }, []);
 
-    const handlePullDataFromNeuron = async (row) => {
+  const handlePullDataFromNeuron = async (row) => {
     try {
-      await pullContentFromNeuron(row.neuron_query); 
+      await pullContentFromNeuron(row.neuron_query);
       Swal.fire(
         "Pulled!",
         "The processed version was downloaded from Neuron Writer.",
         "success"
       );
+      fetchData();
     } catch (err) {
       console.error("Error pulling data:", err);
       Swal.fire("Error", "Could not download the content.", "error");
@@ -95,7 +96,7 @@ export default function NeuronWriter() {
             "The content was successfully sent to Neuron Writer.",
             "success"
           );
-          setContent((prev) => prev.filter((item) => item.id !== row.id));
+          fetchData();
         } catch (error) {
           Swal.fire("Error", "Failed to send the content.", "error");
           console.error("Error sending to Neuron Writer:", error);
